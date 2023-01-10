@@ -3,20 +3,36 @@ package dp;
 import java.util.Scanner;
 
 public class Boj9095 {
-    static int dp[] = new int[11];
+    static int memo[];
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
+        int t = in.nextInt();
 
-        dp[5]=2;
-        for(int i=0;i<n;i++) {
-            System.out.println(recur(in.nextInt()));
+        int n;
+        for(int i=0;i<t;i++) {
+            n= in.nextInt();
+            memo = new int[n+1];
+            System.out.println(dp(n));
         } 
+
         in.close();
 
     }
 
+    static int dp(int n) {
+        if(n==1) return 1;
+        if(n==2) return 2;
+        if(n==3) return 4;
+        if(memo[n]!=0) return memo[n];
+
+        return memo[n] = dp(n-1)+dp(n-2)+dp(n-3);
+    }
+
+
+    /////// 이 밑은 대체 뭘 해놓은거지 ...?
+
+    
     static int brute(int n) {
         int result=0;
         if(n==1) {
@@ -40,14 +56,14 @@ public class Boj9095 {
         if(n==5 || n>=7) {
             int tmp=0;
             if(n-2>=5) {
-                tmp+=dp[n-2];
+                tmp+=memo[n-2];
             }
             if(n-3>=5) {
-                tmp+=dp[n-3];
+                tmp+=memo[n-3];
             }
 
-            dp[n]+=tmp;
-            result+=dp[n];
+            memo[n]+=tmp;
+            result+=memo[n];
         }
         return result;
 
@@ -57,12 +73,12 @@ public class Boj9095 {
         if(n==1 || n==0) return 1;
         if(n<0) return 0;
 
-        if(dp[n]!=0) {
-            return dp[n];
+        if(memo[n]!=0) {
+            return memo[n];
         }
         else {
-            dp[n]=recur(n-1)+recur(n/2-1)+recur(n/3-1)+recur(n/2)+recur(n/6)+recur(n/3);
-            return dp[n];
+            memo[n]=recur(n-1)+recur(n/2-1)+recur(n/3-1)+recur(n/2)+recur(n/6)+recur(n/3);
+            return memo[n];
         }
     }
 }
